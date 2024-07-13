@@ -16,6 +16,6 @@
 
 To deploy the infrastructure using a specific region's variables:
 
-terraform init
-terraform apply -var-file=us-east-1.tfvars
-terraform destroy -var-file=us-east-1.tfvars
+# terraform init
+# terraform apply -var-file=us-east-1.tfvars
+# terraform destroy -var-file=us-east-1.tfvars
