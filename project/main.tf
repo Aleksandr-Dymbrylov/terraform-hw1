@@ -65,7 +65,7 @@ resource "aws_route53_zone" "primary" {
 
 resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.primary.zone_id
-  name = "www.alex-aws.com"
+  name = "my-bucket-alex.alex-aws.com"
   type = "CNAME"
   ttl = 300
   records = [ aws_s3_bucket.my-bucket-alex.website_endpoint ]
