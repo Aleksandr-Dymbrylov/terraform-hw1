@@ -46,7 +46,7 @@ resource "aws_s3_object" "error" {
   content_type = "text/html"
 }
 
-resource "aws_s3_bucket_website_configuration" "web" {
+resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.my-bucket-alex.id
   index_document {
     suffix = "index.html"
@@ -57,4 +57,16 @@ resource "aws_s3_bucket_website_configuration" "web" {
     
     depends_on = [ aws_s3_bucket_acl.example ]
   
+}
+
+resource "aws_route53_zone" "primary" {
+  name = "alex-aws.com"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name = "www.alex-aws.com"
+  type = "CNAME"
+  ttl = 300
+  records = [ aws_s3_bucket.my-bucket-alex.website_endpoint ]
 }
