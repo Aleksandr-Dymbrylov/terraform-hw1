@@ -31,6 +31,7 @@ resource "aws_s3_bucket_acl" "example" {
 }
 
 resource "aws_s3_object" "index" {
+  depends_on = [aws_s3_bucket_acl.example]
   bucket = aws_s3_bucket.my-bucket-alex.id
   key    = "index.html"
   source = "index.html"
@@ -39,6 +40,7 @@ resource "aws_s3_object" "index" {
 }
 
 resource "aws_s3_object" "error" {
+  depends_on = [aws_s3_bucket_acl.example]
   bucket = aws_s3_bucket.my-bucket-alex.id
   key    = "error.html"
   source = "error.html"
@@ -59,14 +61,10 @@ resource "aws_s3_bucket_website_configuration" "website" {
   
 }
 
-resource "aws_route53_zone" "primary" {
-  name = "alex-aws.com"
-}
-
 resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.primary.zone_id
-  name = "my-bucket-alex.alex-aws.com"
+  zone_id = "Z058810638W6QJ42UREE5"
+  name = "bbb.alex-aws.com"
   type = "CNAME"
   ttl = 300
-  records = [ aws_s3_bucket.my-bucket-alex.website_endpoint ]
+  records = ["${aws_s3_bucket.my-bucket-alex.bucket}.s3-website-us-east-1.amazonaws.com"]
 }
