@@ -1,7 +1,10 @@
+provider "aws" {
+  region = var.aws_region
+}
+
 resource "aws_s3_bucket" "my-bucket-alex" {
   bucket = var.bucketname
 }
-
 
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.my-bucket-alex.id
@@ -33,8 +36,8 @@ resource "aws_s3_bucket_acl" "example" {
 resource "aws_s3_object" "index" {
   depends_on = [aws_s3_bucket_acl.example]
   bucket = aws_s3_bucket.my-bucket-alex.id
-  key    = "index.html"
-  source = "index.html"
+  key    = var.index_doc
+  source = var.index_doc
   acl = "public-read"
   content_type = "text/html"
 }
@@ -42,8 +45,8 @@ resource "aws_s3_object" "index" {
 resource "aws_s3_object" "error" {
   depends_on = [aws_s3_bucket_acl.example]
   bucket = aws_s3_bucket.my-bucket-alex.id
-  key    = "error.html"
-  source = "error.html"
+  key    = var.error_doc
+  source = var.error_doc
   acl = "public-read"
   content_type = "text/html"
 }
@@ -51,10 +54,10 @@ resource "aws_s3_object" "error" {
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.my-bucket-alex.id
   index_document {
-    suffix = "index.html"
+    suffix = var.index_doc
   }
   error_document {
-    key = "error.html"
+    key = var.error_doc
     }
     
     depends_on = [ aws_s3_bucket_acl.example ]
